@@ -23,6 +23,8 @@ function socketRoutes(app, opts) {
       //   });
       // });
       socket.on("soil", (data) => {
+        //covert string to number
+        data = parseInt(data);
         console.log("Soil Mositure: ", data);
         if (data >= 4000) {
           app.io.emit("pumpState", "ON");

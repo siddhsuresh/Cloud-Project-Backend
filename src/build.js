@@ -26,17 +26,17 @@ function build(opts) {
     allSoilReadins.push(request.body);
     latestReadings["soil"] = request.body;
     app.io.emit("soil", request.body);
-    reply.code(200);
+    reply.code(204);
   });
   app.post("/temp", async (request, reply) => {
     console.log("Temperature: ", request.body);
     latestReadings["temp"] = request.body;
-    reply.code(200);
+    reply.code(204);
   });
   app.post("/hum", async (request, reply) => {
     console.log("Humidity: ", request.body);
     latestReadings["hum"] = request.body;
-    reply.code(200);
+    reply.code(204);
   });
   app.post("/heat", async (request, reply) => {
     console.log("Heat Index: ", request.body);
@@ -46,7 +46,7 @@ function build(opts) {
     } else {
       app.io.emit("setSpeed", "LOW");
     }
-    reply.code(200);
+    reply.code(204);
   });
   app.get(
     "/API",
