@@ -25,6 +25,11 @@ function build(opts) {
     console.log("Soil: ", request.body);
     allSoilReadins.push(request.body);
     latestReadings["soil"] = request.body;
+    if (request.data >= 4000) {
+      app.io.emit("pumpState", "ON");
+    } else {
+      app.io.emit("pumpState", "OFF");
+    }
     app.io.emit("soil", request.body);
     reply.code(204);
   });
