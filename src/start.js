@@ -6,7 +6,7 @@ const { build } = require("./build");
 async function start() {
   const app = build({ logger: true });
   try {
-    await app.listen(8080);
+    await app.listen(process.env.PORT||8080);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
