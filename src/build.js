@@ -77,7 +77,7 @@ function build(opts) {
         return latestReadings;
       }
       if (q && q === "soil") {
-        return allSoilReadins;
+        return allSoilReadings;
       }
       if (q && q === "dht") {
         return allHeatReadings;
