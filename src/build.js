@@ -23,14 +23,15 @@ function build(opts) {
   });
   app.post("/soil", async (request, reply) => {
     console.log("Soil: ", request.body);
-    allSoilReadins.push(request.body);
-    latestReadings["soil"] = request.body;
-    if (request.data >= 4000) {
+    const soilReading = parseInt(request.body);
+    allSoilReadins.push(soilReading);
+    latestReadings["soil"] = soilReading;
+    if (soilReading >= 4000) {
       app.io.emit("pumpState", "ON");
     } else {
       app.io.emit("pumpState", "OFF");
     }
-    app.io.emit("soil", request.body);
+    app.io.emit("soil", soilReading);
     reply.code(204);
   });
   app.post("/temp", async (request, reply) => {
