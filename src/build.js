@@ -6,7 +6,7 @@ const {
 } = require("./socket.js");
 
 var latestReadings = {};
-var allSoilReadins = [];
+var allSoilReadings = [];
 var allHeatReadings = [];
 
 function build(opts) {
@@ -24,7 +24,10 @@ function build(opts) {
   app.post("/soil", async (request, reply) => {
     console.log("Soil: ", request.body);
     const soilReading = parseInt(request.body);
-    allSoilReadins.push(soilReading);
+    allSoilReadings.push({
+      soil: soilReading,
+      time: new Date()
+    });
     latestReadings["soil"] = soilReading;
     if (soilReading >= 4000) {
       app.io.emit("pumpState", "ON");
@@ -52,6 +55,10 @@ function build(opts) {
     } else {
       app.io.emit("setSpeed", "LOW");
     }
+    allHeatReadings.push({
+      heat: request.body,
+      time: new Date()
+    });
     reply.code(204);
   });
   app.get(
