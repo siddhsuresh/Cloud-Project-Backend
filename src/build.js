@@ -3,10 +3,11 @@
 const fastify = require("fastify");
 const {
   socketRoutes,
-  allHeatReadings,
-  allSoilReadins,
-  latestReadings
 } = require("./socket.js");
+
+var latestReadings = {};
+var allSoilReadins = [];
+var allHeatReadings = [];
 
 function build(opts) {
   const app = fastify(opts);
@@ -20,7 +21,33 @@ function build(opts) {
   app.get("/", async (request, reply) => {
     return { "CSE2021 DRTS Project API": "20BPS1042 Siddharth Suresh" };
   });
-
+  app.post("/soil", async (request, reply) => {
+    console.log("Soil: ", request.body);
+    allSoilReadins.push(request.body);
+    latestReadings["soil"] = request.body;
+    app.io.emit("soil", request.body);
+    reply.code(200);
+  });
+  app.post("/temp", async (request, reply) => {
+    console.log("Temperature: ", request.body);
+    latestReadings["temp"] = request.body;
+    reply.code(200);
+  });
+  app.post("/hum", async (request, reply) => {
+    console.log("Humidity: ", request.body);
+    latestReadings["hum"] = request.body;
+    reply.code(200);
+  });
+  app.post("/heat", async (request, reply) => {
+    console.log("Heat Index: ", request.body);
+    latestReadings["heat"] = request.body;
+    if(request.body >= 24) {
+      app.io.emit("setSpeed", "HIGH");
+    } else {
+      app.io.emit("setSpeed", "LOW");
+    }
+    reply.code(200);
+  });
   app.get(
     "/API",
     {
