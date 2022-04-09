@@ -4,9 +4,7 @@
 const { build } = require("./build");
 
 async function start() {
-  const app = build({ logger: true, cors: {
-    origin: "*"
-  } });
+  const app = build({ logger: true });
   try {
     await app.listen(process.env.PORT || 3000,'0.0.0.0', err => {
       console.log(`server listening on ${app.server.address().port}`)
