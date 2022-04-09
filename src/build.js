@@ -1,7 +1,6 @@
 /* eslint strict:"off" */
 "use strict";
 const fastify = require("fastify");
-fastify.register(require('fastify-cors'))
 const {
   socketRoutes,
 } = require("./socket.js");
@@ -12,7 +11,7 @@ var allHeatReadings = [];
 
 function build(opts) {
   const app = fastify(opts);
-
+  app.register(require('fastify-cors'))
   socketRoutes(app, {
     cors: {
       origin: "*"
