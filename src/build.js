@@ -1,9 +1,7 @@
 /* eslint strict:"off" */
 "use strict";
 const fastify = require("fastify");
-fastify.register(require('fastify-cors'), { 
-  origin: '*'
-})
+fastify.register(require('fastify-cors'))
 const {
   socketRoutes,
 } = require("./socket.js");
