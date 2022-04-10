@@ -31,8 +31,10 @@ function build(opts) {
     latestReadings["soil"] = soilReading;
     if (soilReading >= 4000) {
       app.io.emit("pumpState", "ON");
+      console.log("Pump ON");
     } else {
       app.io.emit("pumpState", "OFF");
+      console.log("Pump OFF");
     }
     app.io.emit("soil", soilReading);
     reply.code(204);
