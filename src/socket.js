@@ -9,8 +9,8 @@ function socketRoutes(app, opts) {
     app.io.on("connection", (socket) => {
       console.log("a user connected");
       socket.on("dht", (data) => {
-        console.log("Temperature: ", data.temp);
-        app.io.emit("temp", data.temp);
+        console.log("Temperature: ", data);
+        app.io.emit("temp", data);
         if(data >= 32) {
           app.io.emit("setSpeed", "HIGH");
         } else {
