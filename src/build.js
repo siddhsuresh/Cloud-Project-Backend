@@ -24,17 +24,23 @@ function build(opts) {
   app.post("/soil", async (request, reply) => {
     console.log("Soil: ", request.body);
     const soilReading = parseInt(request.body);
-    allSoilReadings.push({
-      soil: soilReading,
-      time: new Date()
-    });
     latestReadings["soil"] = soilReading;
     if (soilReading >= 4000) {
       app.io.emit("pumpState", "ON");
       console.log("Pump ON");
+      allSoilReadings.push({
+        soil: soilReading,
+        time: new Date(),
+        state: true
+      });
     } else {
       app.io.emit("pumpState", "OFF");
       console.log("Pump OFF");
+      allSoilReadings.push({
+        soil: soilReading,
+        time: new Date(),
+        state: false
+      });
     }
     app.io.emit("soil", soilReading);
     reply.code(204);
