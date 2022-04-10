@@ -25,7 +25,7 @@ function build(opts) {
     console.log("Soil: ", request.body);
     const soilReading = parseInt(request.body);
     latestReadings["soil"] = soilReading;
-    if (soilReading >= 4000) {
+    if (soilReading >= 3500) {
       app.io.emit("pumpState", "ON");
       console.log("Pump ON");
       allSoilReadings.push({
