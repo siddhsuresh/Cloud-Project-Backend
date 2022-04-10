@@ -3,11 +3,11 @@
 const fastify = require("fastify");
 const {
   socketRoutes,
+  allHeatReadings
 } = require("./socket.js");
 
 var latestReadings = {};
 var allSoilReadings = [];
-var allHeatReadings = [];
 
 function build(opts) {
   const app = fastify(opts);
@@ -46,16 +46,6 @@ function build(opts) {
     reply.code(204);
   });
   app.post("/temp", async (request, reply) => {
-    console.log("Temperature: ", request.body);
-    latestReadings["temp"] = request.body;
-    reply.code(204);
-  });
-  app.post("/hum", async (request, reply) => {
-    console.log("Humidity: ", request.body);
-    latestReadings["hum"] = request.body;
-    reply.code(204);
-  });
-  app.post("/heat", async (request, reply) => {
     console.log("Heat Index: ", request.body);
     latestReadings["heat"] = request.body;
     if(request.body >= 24) {
@@ -67,7 +57,6 @@ function build(opts) {
       heat: request.body,
       time: new Date()
     });
-    reply.code(204);
   });
   app.get(
     "/API",
