@@ -3,11 +3,20 @@
 const fastify = require("fastify");
 const {
   socketRoutes,
-  allHeatReadings
+  allHeatReadings,
+  esp8266_isConnected
 } = require("./socket.js");
 
 var latestReadings = {};
 var allSoilReadings = [];
+var esp32_isConnected=false;
+
+function setesp32Disconnect()
+{
+  esp32_isConnected=false;
+}
+
+setTimeout(setesp32Disconnect, 9500);
 
 function build(opts) {
   const app = fastify(opts);
@@ -22,6 +31,7 @@ function build(opts) {
     return { "CSE2021 DRTS Project API": "20BPS1042 Siddharth Suresh" };
   });
   app.post("/soil", async (request, reply) => {
+    esp32_isConnected=true;
     console.log("Soil: ", request.body);
     const soilReading = parseInt(request.body);
     latestReadings["soil"] = soilReading;
@@ -57,6 +67,7 @@ function build(opts) {
       heat: request.body,
       time: new Date()
     });
+    reply.code(204);
   });
   app.get(
     "/API",
@@ -79,8 +90,19 @@ function build(opts) {
       if (q && q === "dht") {
         return allHeatReadings;
       }
+      if (q && q === "esp8266") {
+        return esp8266_isConnected;
+      }
+      if (q && q === "esp32") {
+        return esp32_isConnected;
+      }
       return {
-        error: "404 - No Such Page In The Api"
+        // return all
+        latest: latestReadings,
+        soil: allSoilReadings,
+        dht: allHeatReadings,
+        esp8266: esp8266_isConnected,
+        esp32: esp32_isConnected
       };
     }
   );
