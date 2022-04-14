@@ -4,7 +4,6 @@ const fastify = require("fastify");
 const {
   socketRoutes,
   allHeatReadings,
-  esp8266_isConnected
 } = require("./socket.js");
 
 var latestReadings = {};
@@ -75,7 +74,6 @@ function build(opts) {
       function setesp32Disconnect() {
         esp32_isConnected = false;
       }
-
       setTimeout(setesp32Disconnect, 3000);
       const { q } = request.query;
       if (q && q === "latest") {
@@ -99,7 +97,6 @@ function build(opts) {
         latest: latestReadings,
         soil: allSoilReadings,
         dht: allHeatReadings,
-        esp8266: esp8266_isConnected,
         esp32: esp32_isConnected
       };
     }

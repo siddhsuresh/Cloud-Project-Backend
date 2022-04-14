@@ -1,7 +1,6 @@
 const fastifyIO = require("fastify-socket.io");
 
 var allHeatReadings = [];
-var esp8266_isConnected = false;
 var esp8266_socketid = null;
 
 function socketRoutes(app, opts) {
@@ -10,8 +9,13 @@ function socketRoutes(app, opts) {
     // we need to wait for the server to be ready, else `server.io` is undefined
     app.io.on("connection", (socket) => {
       console.log("a user connected");
+      socket.io("esp8266",(data)=>{
+        console.log("esp8266 ",data);
+        esp8266_socketid = socket.id;
+        app.io.emit("esp8266", data);
+      })
       socket.on("dht", (data) => {
-        esp8266_isConnected = true;
+        socket.emit("esp8266",true);
         esp8266_socketid = socket.id;
         console.log("Temperature: ", data);
         app.io.emit("temp", data);
@@ -41,7 +45,7 @@ function socketRoutes(app, opts) {
       });
       socket.on("disconnect", () => {
         if(socket.id===esp8266_socketid) {
-          esp8266_isConnected = false;
+          socket.emit("esp8266",false);
         }
         console.log("user disconnected");
       });
@@ -52,5 +56,5 @@ function socketRoutes(app, opts) {
 }
 
 module.exports = {
-  socketRoutes, allHeatReadings, esp8266_isConnected
+  socketRoutes, allHeatReadings
 };
