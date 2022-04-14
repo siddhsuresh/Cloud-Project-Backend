@@ -9,14 +9,7 @@ const {
 
 var latestReadings = {};
 var allSoilReadings = [];
-var esp32_isConnected=false;
-
-function setesp32Disconnect()
-{
-  esp32_isConnected=false;
-}
-
-setTimeout(setesp32Disconnect, 9500);
+var esp32_isConnected = false;
 
 function build(opts) {
   const app = fastify(opts);
@@ -31,7 +24,7 @@ function build(opts) {
     return { "CSE2021 DRTS Project API": "20BPS1042 Siddharth Suresh" };
   });
   app.post("/soil", async (request, reply) => {
-    esp32_isConnected=true;
+    esp32_isConnected = true;
     console.log("Soil: ", request.body);
     const soilReading = parseInt(request.body);
     latestReadings["soil"] = soilReading;
@@ -58,7 +51,7 @@ function build(opts) {
   app.post("/temp", async (request, reply) => {
     console.log("Heat Index: ", request.body);
     latestReadings["heat"] = request.body;
-    if(request.body >= 24) {
+    if (request.body >= 24) {
       app.io.emit("setSpeed", "HIGH");
     } else {
       app.io.emit("setSpeed", "LOW");
@@ -79,6 +72,11 @@ function build(opts) {
       }
     },
     async (request, reply) => {
+      function setesp32Disconnect() {
+        esp32_isConnected = false;
+      }
+
+      setTimeout(setesp32Disconnect, 3000);
       const { q } = request.query;
       if (q && q === "latest") {
         console.log(latestReadings);
