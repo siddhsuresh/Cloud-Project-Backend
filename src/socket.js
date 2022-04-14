@@ -44,7 +44,9 @@ function socketRoutes(app, opts) {
         app.io.emit("setSpeed", data);
       });
       socket.on("disconnect", () => {
-        socket.emit("esp8266",false);
+        if(socket.id===esp8266_socketid) {
+          app.io.emit("esp8266",false);
+        }
         console.log("user disconnected");
       });
     });
