@@ -9,7 +9,7 @@ function socketRoutes(app, opts) {
     // we need to wait for the server to be ready, else `server.io` is undefined
     app.io.on("connection", (socket) => {
       console.log("a user connected");
-      socket.io("esp8266",(data)=>{
+      socket.on("esp8266",(data)=>{
         console.log("esp8266 ",data);
         esp8266_socketid = socket.id;
         app.io.emit("esp8266", data);
