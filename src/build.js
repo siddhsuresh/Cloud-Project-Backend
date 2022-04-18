@@ -81,7 +81,7 @@ function build(opts) {
   );
   app.get("/currentTime", async (request, reply) => {
     return {
-      currentTime: new Date().toLocaleTimeString("en-IN")
+      currentTime: new Date()
       };
   });
   return app;
