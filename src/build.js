@@ -49,7 +49,8 @@ function build(opts) {
   });
   app.post("/temp", async (request, reply) => {
     console.log("Heat Index: ", request.body);
-    if (request.body >= 24) {
+    const tempReading = parseInt(request.body);
+    if (tempReading >= 24) {
       app.io.emit("setSpeed", "HIGH");
     } else {
       app.io.emit("setSpeed", "LOW");
