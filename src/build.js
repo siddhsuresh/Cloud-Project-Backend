@@ -57,7 +57,7 @@ function build(opts) {
     }
     allHeatReadings.push({
       group: "heat",
-      heat: request.body,
+      heat: tempReading,
       time: new Date()
     });
     reply.code(204);
