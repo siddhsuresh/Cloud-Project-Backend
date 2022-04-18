@@ -66,7 +66,6 @@ function build(opts) {
     async (request, reply) => {
       function setesp32Disconnect() {
         app.io.emit("esp32",false);
-        esp32_isConnected = false;
       }
       setTimeout(setesp32Disconnect, 3000);
       //Clear all readings
