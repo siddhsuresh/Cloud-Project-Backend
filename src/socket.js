@@ -11,12 +11,10 @@ function socketRoutes(app, opts) {
       console.log("a user connected");
       socket.on("esp8266",(data)=>{
         console.log("esp8266 ",data);
-        esp8266_socketid = socket.id;
         app.io.emit("esp8266", data);
       })
       socket.on("dht", (data) => {
         app.io.emit("esp8266",true);
-        esp8266_socketid = socket.id;
         console.log("Temperature: ", data);
         app.io.emit("temp", data);
         if(data >= 32) {
@@ -44,7 +42,7 @@ function socketRoutes(app, opts) {
         app.io.emit("setSpeed", data);
       });
       socket.on("disconnect", () => {
-          app.io.emit("esp8266",false);
+        app.io.emit("esp8266",false);
         console.log("user disconnected");
       });
     });

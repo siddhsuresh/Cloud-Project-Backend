@@ -31,6 +31,7 @@ function build(opts) {
       app.io.emit("pumpState", "ON");
       console.log("Pump ON");
       allSoilReadings.push({
+        group:"soil",
         soil: soilReading,
         time: new Date(),
         state: true
@@ -39,6 +40,7 @@ function build(opts) {
       app.io.emit("pumpState", "OFF");
       console.log("Pump OFF");
       allSoilReadings.push({
+        group: "soil",
         soil: soilReading,
         time: new Date(),
         state: false
@@ -56,6 +58,7 @@ function build(opts) {
       app.io.emit("setSpeed", "LOW");
     }
     allHeatReadings.push({
+      group: "heat",
       heat: request.body,
       time: new Date()
     });
