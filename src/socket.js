@@ -13,6 +13,10 @@ function socketRoutes(app, opts) {
         console.log("esp8266 ",data);
         app.io.emit("esp8266", data);
       })
+      socket.on("esp32",(data)=>{
+        console.log("esp32 ",data);
+        app.io.emit("esp32", data);
+      })
       socket.on("dht", (data) => {
         app.io.emit("esp8266",true);
         console.log("Temperature: ", data);
