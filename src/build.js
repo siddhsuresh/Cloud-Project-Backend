@@ -7,7 +7,7 @@ const {
 } = require("./socket.js");
 
 var allSoilReadings = [];
-var esp32_isConnected = false;
+var allReadings = [];
 
 function build(opts) {
   const app = fastify(opts);
@@ -63,38 +63,19 @@ function build(opts) {
   });
   app.get(
     "/API",
-    {
-      query: {
-        q: {
-          type: "string"
-        }
-      }
-    },
     async (request, reply) => {
       function setesp32Disconnect() {
         app.io.emit("esp32",false);
         esp32_isConnected = false;
       }
       setTimeout(setesp32Disconnect, 3000);
-      const { q } = request.query;
-      if (q && q === "latest") {
-      }
-      if (q && q === "soil") {
-        return allSoilReadings;
-      }
-      if (q && q === "dht") {
-        return allHeatReadings;
-      }
-      if (q && q === "esp8266") {
-        return esp8266_isConnected;
-      }
-      if (q && q === "esp32") {
-        return esp32_isConnected;
-      }
+      //Clear all readings
+      allReadings = [];
+      allReadings.push(...allSoilReadings);
+      allReadings.push(...allHeatReadings);
       return {
         // return all
-        allSoilReadings,
-        allHeatReadings,
+        readings: allReadings
       };
     }
   );
