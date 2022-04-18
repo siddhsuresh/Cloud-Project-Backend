@@ -79,6 +79,11 @@ function build(opts) {
       };
     }
   );
+  app.gey("/currentTime", async (request, reply) => {
+    return {
+      currentTime: new Date().toLocaleTimeString()
+      };
+  });
   return app;
 }
 
