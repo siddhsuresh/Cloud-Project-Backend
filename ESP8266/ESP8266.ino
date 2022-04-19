@@ -67,15 +67,21 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
     {
       http.useHTTP10(true);
       http.begin(client,"https://drts-jcomp-20bps1042.herokuapp.com/currentTime");
+      http.addHeader("Content-Type", "text/plain");
       int httpCode = http.GET(); // Send the request
       if (httpCode == 200)
       {
         Serial.println("[HTTP] GET /currentTime successful");
-        DynamicJsonDocument doct(2048);
+        DynamicJsonDocument doct(2048),doc(2048);
         deserializeJson(doct, http.getStream());
-        // Read values
-        // Get the response payload
-        socketIO.sendEVENT("esp8266ack",doct["currentTime"]);
+        String time = doct["currentTime"].as<String>();
+        JsonArray array = doc.to<JsonArray>();
+        array.add("esp8266ack");
+        array.add(time);        
+        String output;
+        serializeJson(doc, output);
+        // Send event
+        socketIO.sendEVENT(output);
       }
       else
       {
