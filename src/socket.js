@@ -35,6 +35,7 @@ function socketRoutes(app, opts) {
           app.io.emit("setSpeed", "LOW");
         }
         allHeatReadings.push({
+          group: "heat",
           heat: data,
           time: new Date()
         });

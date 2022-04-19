@@ -63,22 +63,6 @@ function build(opts) {
     app.io.emit("soil", soilReading);
     reply.code(204);
   });
-  app.post("/temp", async (request, reply) => {
-    console.log("Heat Index: ", request.body);
-    const tempReading = Number(request.body);
-    if (tempReading >= 24) {
-      app.io.emit("setSpeed", "HIGH");
-    } else {
-      app.io.emit("setSpeed", "LOW");
-    }
-    allHeatReadings.push({
-      group: "heat",
-      heat: tempReading,
-      time: new Date()
-    });
-    console.log(allHeatReadings)
-    reply.code(204);
-  });
   app.post("/esp32req", async (request, reply) => {
     console.log("esp32req: ", request.body);
     app.io.emit("esp8266req",request.body);
