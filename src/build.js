@@ -32,6 +32,7 @@ function build(opts) {
   });
   app.post("/soil", async (request, reply) => {
     app.io.emit("esp32",true);
+    console.log("Time: ", request.body.time);
     app.io.emit("esp32req",request.body.time)
     console.log("Soil: ", request.body.soil);
     const soilReading = parseInt(request.body);
