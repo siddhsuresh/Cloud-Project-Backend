@@ -65,9 +65,8 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
     }
     if (array[0] == "pumpState")
     {
-      http.useHTTP10(true);
-      http.begin(client,"https://drts-jcomp-20bps1042.herokuapp.com/currentTime");
-      http.addHeader("Content-Type", "text/plain");
+      http.begin(client,"http://drts-jcomp-20bps1042.herokuapp.com/currentTime");
+      http.addHeader("Content-Type", "application/json");
       int httpCode = http.GET(); // Send the request
       if (httpCode == 200)
       {
@@ -86,6 +85,7 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
       else
       {
         Serial.println("[HTTP] GET /currentTime failed");
+        Serial.println(httpCode);    
       }
       if (array[1] == "ON")
       {

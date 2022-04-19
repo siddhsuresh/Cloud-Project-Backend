@@ -1,5 +1,5 @@
 const fastifyIO = require("fastify-socket.io");
-
+const { esp32req } = require("/build.js");
 var allHeatReadings = [];
 var esp8266acks = [];
 
@@ -16,7 +16,7 @@ function socketRoutes(app, opts) {
       socket.on("esp8266ack",(data)=>{
         console.log("esp8266ack ",data);
         esp8266acks.push({
-          id: esp8266acks.length,
+          id: esp32req.length,
           time:data
         });
         app.io.emit("esp8266ack", data);

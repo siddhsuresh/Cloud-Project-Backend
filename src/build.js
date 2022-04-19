@@ -94,5 +94,5 @@ function build(opts) {
 }
 
 module.exports = {
-  build
+  build, esp32req
 };
