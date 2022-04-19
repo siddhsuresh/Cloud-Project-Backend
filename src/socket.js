@@ -1,5 +1,5 @@
 const fastifyIO = require("fastify-socket.io");
-const { esp32req } = require("/build.js");
+const { esp32req } = require("./build.js");
 var allHeatReadings = [];
 var esp8266acks = [];
 
