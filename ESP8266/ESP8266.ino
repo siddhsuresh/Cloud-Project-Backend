@@ -74,7 +74,7 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
         DynamicJsonDocument doct(2048);
         deserializeJson(doct, http.getStream());
         // Read values
-        Serial.println(doct["currentTime"]); // Get the response payload
+        // Get the response payload
         socketIO.sendEVENT("esp8266ack",doct["currentTime"]);
       }
       else

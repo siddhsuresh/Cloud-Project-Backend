@@ -98,7 +98,7 @@ void Send2Server(void *parameter)
     struct pinRead currentPinRead;
     if (xQueueReceive(queue, &currentPinRead, portMAX_DELAY) == pdPASS)
     {
-      char *time = "";
+      String time = "";
       Serial.print("Pin: ");
       Serial.print(currentPinRead.pin);
       Serial.print(" Value: ");
@@ -107,7 +107,7 @@ void Send2Server(void *parameter)
       {
         http.begin("https://drts-jcomp-20bps1042.herokuapp.com/currentTime");
         http.addHeader("Content-Type", "text/plain");
-        httpResponseCode = http.GET();
+        int httpResponseCode = http.GET();
         if (httpResponseCode == 200)
         {
           DynamicJsonDocument doct(2048);
@@ -115,7 +115,7 @@ void Send2Server(void *parameter)
 
           deserializeJson(doct, http.getStream());
           // Read values
-          time = doc["currentTime"]; // Get the response payload
+          time = doct["currentTime"].as<String>(); // Get the response payload
         }
         else
         {
@@ -127,8 +127,9 @@ void Send2Server(void *parameter)
         DynamicJsonDocument doc(1024);
         doc["soil"] = currentPinRead.value;
         doc["time"] = time;
-        serializeJson(doc, Serial);
-        httpResponseCode = http.POST(doc);
+        String output;
+        serializeJson(doc, output);
+        httpResponseCode = http.POST(output);
         if (httpResponseCode == 204)
         {
           Serial.println("[HTTP] POST /soil successful");

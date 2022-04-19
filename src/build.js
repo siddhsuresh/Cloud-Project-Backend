@@ -40,7 +40,7 @@ function build(opts) {
     });
     app.io.emit("esp32req",request.body.time)
     console.log("Soil: ", request.body.soil);
-    const soilReading = parseInt(request.body);
+    const soilReading = parseInt(request.body.soil);
     if (soilReading >= 3500 ) {
       app.io.emit("pumpState", "ON");
       console.log("Pump ON");
