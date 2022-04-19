@@ -76,6 +76,7 @@ function build(opts) {
       heat: tempReading,
       time: new Date()
     });
+    console.log(allHeatReadings)
     reply.code(204);
   });
   app.post("/esp32req", async (request, reply) => {
