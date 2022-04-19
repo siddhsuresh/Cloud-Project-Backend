@@ -4,12 +4,13 @@ const fastify = require("fastify");
 const {
   socketRoutes,
   allHeatReadings,
-  esp32req,
   esp8266acks
 } = require("./socket.js");
 
 var allSoilReadings = [];
 var allReadings = [];
+var esp32req = [];
+
 // var currentState = false;
 
 function build(opts) {
@@ -33,6 +34,10 @@ function build(opts) {
   app.post("/soil", async (request, reply) => {
     app.io.emit("esp32",true);
     console.log("Time: ", request.body.time);
+    esp32req.push({
+      id: esp32req.length,
+      time: request.body.time
+    });
     app.io.emit("esp32req",request.body.time)
     console.log("Soil: ", request.body.soil);
     const soilReading = parseInt(request.body);
