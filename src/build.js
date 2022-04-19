@@ -72,7 +72,7 @@ function build(opts) {
     });
     reply.code(204);
   });
-  app.post("esp32req", async (request, reply) => {
+  app.post("/esp32req", async (request, reply) => {
     console.log("esp32req: ", request.body);
     app.io.emit("esp8266req",request.body);
     reply.code(204);
