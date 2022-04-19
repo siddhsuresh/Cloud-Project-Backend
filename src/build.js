@@ -4,10 +4,13 @@ const fastify = require("fastify");
 const {
   socketRoutes,
   allHeatReadings,
+  esp32req,
+  esp8266acks
 } = require("./socket.js");
 
 var allSoilReadings = [];
 var allReadings = [];
+// var currentState = false;
 
 function build(opts) {
   const app = fastify(opts);
@@ -21,11 +24,18 @@ function build(opts) {
   app.get("/", async (request, reply) => {
     return { "CSE2021 DRTS Project API": "20BPS1042 Siddharth Suresh" };
   });
+  app.get("/responseTime", async (request, reply) => {
+    return {
+      esp32req: esp32req,
+      esp8266acks: esp8266acks
+    };
+  });
   app.post("/soil", async (request, reply) => {
     app.io.emit("esp32",true);
-    console.log("Soil: ", request.body);
+    app.io.emit("esp32req",request.body.time)
+    console.log("Soil: ", request.body.soil);
     const soilReading = parseInt(request.body);
-    if (soilReading >= 3500) {
+    if (soilReading >= 3500 ) {
       app.io.emit("pumpState", "ON");
       console.log("Pump ON");
       allSoilReadings.push({
@@ -34,7 +44,7 @@ function build(opts) {
         time: new Date(),
         state: true
       });
-    } else {
+    } else if(soilReading < 3500) {
       app.io.emit("pumpState", "OFF");
       console.log("Pump OFF");
       allSoilReadings.push({
@@ -60,6 +70,11 @@ function build(opts) {
       heat: tempReading,
       time: new Date()
     });
+    reply.code(204);
+  });
+  app.post("esp32req", async (request, reply) => {
+    console.log("esp32req: ", request.body);
+    app.io.emit("esp8266req",request.body);
     reply.code(204);
   });
   app.get(

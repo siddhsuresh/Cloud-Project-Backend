@@ -1,7 +1,8 @@
 const fastifyIO = require("fastify-socket.io");
 
 var allHeatReadings = [];
-var esp8266_socketid = null;
+var esp8266acks = [];
+var esp32req = [];
 
 function socketRoutes(app, opts) {
   app.register(fastifyIO, opts);
@@ -12,6 +13,22 @@ function socketRoutes(app, opts) {
       socket.on("esp8266",(data)=>{
         console.log("esp8266 ",data);
         app.io.emit("esp8266", data);
+      })
+      socket.on("esp8266ack",(data)=>{
+        console.log("esp8266ack ",data);
+        esp8266acks.push({
+          id: esp32req.length,
+          time:data
+        });
+        app.io.emit("esp8266ack", data);
+      })
+      socket.on("esp32req",(data)=>{
+        console.log("esp32req ",data);
+        esp32req.push({
+          id: esp32req.length,
+          time:data
+        });
+        app.io.emit("esp32req", data);
       })
       socket.on("esp32",(data)=>{
         console.log("esp32 ",data);
@@ -56,5 +73,5 @@ function socketRoutes(app, opts) {
 }
 
 module.exports = {
-  socketRoutes, allHeatReadings
+  socketRoutes, allHeatReadings, esp8266acks, esp32req
 };
