@@ -36,7 +36,7 @@ function build(opts) {
     console.log("Time: ", request.body.time);
     esp32req.push({
       id: esp32req.length,
-      time: request.body.time
+      timeesp32: request.body.time
     });
     app.io.emit("esp32req",request.body.time)
     console.log("Soil: ", request.body.soil);
