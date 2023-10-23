@@ -122,7 +122,7 @@ void Send2Server(void *parameter)
           Serial.println("[HTTP] GET /currentTime failed");
         }
         http.end();
-        http.begin("https://drts-jcomp-20bps1042.herokuapp.com/soil");
+        http.begin("https://azki8at90f.execute-api.us-east-1.amazonaws.com/soil");
         http.addHeader("Content-Type", "application/json");
         DynamicJsonDocument doc(1024);
         doc["soil"] = currentPinRead.value;
